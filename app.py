@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import satisfaction_survey as survey
 
@@ -24,6 +24,7 @@ def question(qidx):
     #protect from user tinkering with URL
     correct_idx = len(responses)
     if qidx != correct_idx:
+        flash(f'Sir/madam, you are trying to access an invalid question and have been redirected to question {correct_idx + 1}.')
         return redirect(f'/question/{correct_idx}')
 
     curr_q = survey.questions[qidx]
