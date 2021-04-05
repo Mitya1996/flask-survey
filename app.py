@@ -54,3 +54,5 @@ def thankyou():
 @app.before_request
 def test():
     print(session.get('responses', None))
+
+#
