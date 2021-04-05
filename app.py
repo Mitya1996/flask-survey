@@ -21,13 +21,19 @@ def home():
 
 @app.route('/question/<int:qidx>')
 def question(qidx):
+    #protect from user tinkering with URL
+    correct_idx = len(responses)
+    if qidx != correct_idx:
+        return redirect(f'/question/{correct_idx}')
+
     curr_q = survey.questions[qidx]
     return render_template('question.html', curr_q=curr_q, qidx=qidx)
 
 @app.route('/answer', methods=['POST'])
 def answer():
     answ = request.form['choice']
-    responses.append(answ)
+    if len(responses) < len(survey.questions): #only append if responses not yet full
+        responses.append(answ)
 
     qidx = len(responses)
     if qidx > len(survey.questions) - 1:
@@ -37,6 +43,7 @@ def answer():
 
 @app.route('/thankyou')
 def thankyou():
+    print(responses) 
     return render_template('thankyou.html')
 
 
